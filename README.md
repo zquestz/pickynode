@@ -40,7 +40,7 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.0.1
+pickynode v0.0.2
 Options:
   -a, --add=<s>           Node type to add
   -b, --ban=<s>           Node type to ban
