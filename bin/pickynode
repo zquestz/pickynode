@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+require 'awesome_print'
+require 'json'
+require 'net/http'
+require 'pp'
+require 'trollop'
+require 'uri'
+
+VERSION = "0.0.1"
+
+opts = Trollop::options do
+  version "pickynode v#{VERSION}"
+  opt :add, "Node type to add", :type => :string
+  opt :ban, "Node type to ban", :type => :string
+  opt :debug, "Debug mode"
+  opt :output, "Output commands"
+  opt :disconnect, "Node type to disconnect", :type => :string
+end
+
+def run(cmd, opts={})
+  puts "Running #{cmd}" if opts[:output] || opts[:debug]
+  `#{cmd}` unless opts[:debug]
+end
+
+if filter = opts[:add]
+  u = URI.parse("https://bitnodes.21.co/api/v1/snapshots/latest/")
+  nodelist = Net::HTTP.get(u)
+  parsed_nodelist = JSON.parse(nodelist)
+  bitnode_addr_types = parsed_nodelist['nodes'].map { |k,v| [k, v[1]] }.to_h
+  bitnode_addr_types.each do |k,v|
+    if v.include?(filter)
+      u = URI.parse("https://#{k}")
+      run(%^bitcoin-cli addnode "#{u.host}" "add"^, opts)
+    end
+  end
+end
+
+nodes = `bitcoin-cli getpeerinfo`
+parsed_nodes = JSON.parse(nodes)
+addr_types = parsed_nodes.map { |n| [n["addr"], n["subver"]] }.to_h
+
+if filter = opts[:disconnect]
+  addr_types.each do |k,v|
+    if v.include?(filter)
+      run(%^bitcoin-cli disconnectnode "#{k}"^, opts)
+    end
+  end
+end
+
+if filter = opts[:ban]
+  addr_types.each do |k,v|
+    if v.include?(filter)
+      u = URI.parse("https://#{k}")
+      run(%^bitcoin-cli setban "#{u.host}" "add"^, opts)
+    end
+  end
+end
+
+unless opts.values.select { |v| v }.empty?
+  exit(0)
+end
+
+ap addr_types

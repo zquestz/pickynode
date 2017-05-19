@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    awesome_print (1.7.0)
+    trollop (2.1.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  awesome_print
+  trollop
+
+RUBY VERSION
+   ruby 2.3.4p301
+
+BUNDLED WITH
+   1.14.6
