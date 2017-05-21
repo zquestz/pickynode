@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'pickynode'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2017-05-19'
   s.summary     = 'Manage connections to your bitcoin node'
   s.description = 'Some people are picky about the bitcoin nodes they connect to.'

@@ -6,15 +6,16 @@ require 'pp'
 require 'trollop'
 require 'uri'
 
-VERSION = "0.0.2"
+VERSION = "0.0.3"
 
 opts = Trollop::options do
   version "pickynode v#{VERSION}"
-  opt :add, "Node type to add", :type => :string
-  opt :ban, "Node type to ban", :type => :string
+  opt :add, "Add node type", :type => :string
+  opt :connect, "Connect to node type", :type => :string
+  opt :ban, "Ban node type", :type => :string
   opt :debug, "Debug mode"
   opt :output, "Output commands"
-  opt :disconnect, "Node type to disconnect", :type => :string
+  opt :disconnect, "Disconnect from node type", :type => :string
 end
 
 def run(cmd, opts={})
@@ -22,36 +23,58 @@ def run(cmd, opts={})
   `#{cmd}` unless opts[:debug]
 end
 
-if filter = opts[:add]
+def get_addr_types
+  nodes = `bitcoin-cli getpeerinfo`
+  parsed_nodes = JSON.parse(nodes)
+  parsed_nodes.map { |n| [n["addr"], n["subver"]] }.to_h
+end
+
+def get_bitnode_addr_types
   u = URI.parse("https://bitnodes.21.co/api/v1/snapshots/latest/")
   nodelist = Net::HTTP.get(u)
   parsed_nodelist = JSON.parse(nodelist)
-  bitnode_addr_types = parsed_nodelist['nodes'].map { |k,v| [k, v[1]] }.to_h
-  bitnode_addr_types.each do |k,v|
-    if v.include?(filter)
-      u = URI.parse("https://#{k}")
-      run(%^bitcoin-cli addnode "#{u.host}" "add"^, opts)
+  parsed_nodelist['nodes'].map { |k,v| [k, v[1]] }.to_h
+end
+
+if opts[:add] || opts[:connect]
+  bitnode_addr_types = get_bitnode_addr_types
+
+  if filter = opts[:add]
+    bitnode_addr_types.each do |k,v|
+      if v.include?(filter)
+        u = URI.parse("https://#{k}")
+        run(%^bitcoin-cli addnode "#{u.host}" "add"^, opts)
+      end
+    end
+  end
+
+  if filter = opts[:connect]
+    bitnode_addr_types.each do |k,v|
+      if v.include?(filter)
+        u = URI.parse("https://#{k}")
+        run(%^bitcoin-cli addnode "#{u.host}" "onetry"^, opts)
+      end
     end
   end
 end
 
-nodes = `bitcoin-cli getpeerinfo`
-parsed_nodes = JSON.parse(nodes)
-addr_types = parsed_nodes.map { |n| [n["addr"], n["subver"]] }.to_h
+if opts[:ban] || opts[:disconnect]
+  addr_types = get_addr_types
 
-if filter = opts[:disconnect]
-  addr_types.each do |k,v|
-    if v.include?(filter)
-      run(%^bitcoin-cli disconnectnode "#{k}"^, opts)
+  if filter = opts[:ban]
+    addr_types.each do |k,v|
+      if v.include?(filter)
+        u = URI.parse("https://#{k}")
+        run(%^bitcoin-cli setban "#{u.host}" "add"^, opts)
+      end
     end
   end
-end
 
-if filter = opts[:ban]
-  addr_types.each do |k,v|
-    if v.include?(filter)
-      u = URI.parse("https://#{k}")
-      run(%^bitcoin-cli setban "#{u.host}" "add"^, opts)
+  if filter = opts[:disconnect]
+    addr_types.each do |k,v|
+      if v.include?(filter)
+        run(%^bitcoin-cli disconnectnode "#{k}"^, opts)
+      end
     end
   end
 end
@@ -60,4 +83,4 @@ unless opts.values.select { |v| v }.empty?
   exit(0)
 end
 
-ap addr_types
+ap get_addr_types

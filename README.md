@@ -21,17 +21,22 @@ Display list of currently connected nodes:
 pickynode
 ```
 
-Add a node type:
+Add node type:
 ```
 pickynode --add=USER_AGENT_FILTER
 ```
 
-Ban a node type:
+Ban node type:
 ```
 pickynode --ban=USER_AGENT_FILTER
 ```
 
-Disconnect a node type:
+Connect to node type:
+```
+pickynode --connect=USER_AGENT_FILTER
+```
+
+Disconnect from node type:
 
 ```
 pickynode --disconnect=USER_AGENT_FILTER
@@ -40,15 +45,17 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.0.2
+pickynode v0.0.3
 Options:
-  -a, --add=<s>           Node type to add
-  -b, --ban=<s>           Node type to ban
+  -a, --add=<s>           Add node type
+  -c, --connect=<s>       Connect to node type
+  -b, --ban=<s>           Ban node type
   -d, --debug             Debug mode
   -o, --output            Output commands
-  -i, --disconnect=<s>    Node type to disconnect
+  -i, --disconnect=<s>    Disconnect from node type
   -v, --version           Print version and exit
   -h, --help              Show this message
+
 ```
 
-The --add command pulls data from Bitnodes.
+The --add and --connect commands pull data from Bitnodes.
