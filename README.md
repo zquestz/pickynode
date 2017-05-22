@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/pickynode.svg)](https://badge.fury.io/rb/pickynode) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Gem Version](https://badge.fury.io/rb/pickynode.svg)](https://badge.fury.io/rb/pickynode) [![Build Status](https://travis-ci.org/zquestz/pickynode.svg)](https://travis-ci.org/zquestz/pickynode) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # pickynode
 
 Some people are picky about the bitcoin nodes they connect to.
