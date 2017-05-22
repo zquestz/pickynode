@@ -108,7 +108,8 @@ describe Pickynode do
 
   describe '.display' do
     it 'should display connected nodes' do
-      expect(subject).to receive(:getpeerinfo).and_return(PEER_INFO)
+      expect(subject).to receive(:getpeerinfo).once
+        .and_return(PEER_INFO)
       expect(subject).to receive(:ap).with(node_hash).and_return(node_hash)
       expect(subject.display).to eq(node_hash)
     end
@@ -129,7 +130,8 @@ describe Pickynode do
       it 'should call add, connect, ban and disconnect' do
         expect(subject).to receive(:bitnodes_snapshot).once
           .and_return(BITNODES_SNAPSHOT)
-        expect(subject).to receive(:getpeerinfo).and_return(PEER_INFO)
+        expect(subject).to receive(:getpeerinfo).once
+          .and_return(PEER_INFO)
         expect(subject).to receive(:add).with(opts[:add])
           .and_call_original
         expect(subject).to receive(:connect).with(opts[:connect])
