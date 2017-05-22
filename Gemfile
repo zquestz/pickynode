@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.3.4'
+ruby '>= 2.0'
 
 gem 'awesome_print', '~> 1.7'
 gem 'rake', '~> 12.0'
