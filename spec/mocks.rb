@@ -12,6 +12,22 @@ BITNODES_SNAPSHOT = <<-HEREDOC
 }
 HEREDOC
 
+NODE_INFO = <<-HEREDOC
+{
+  "version": 1020500,
+  "protocolversion": 70012,
+  "blocks": 467548,
+  "timeoffset": 0,
+  "connections": 154,
+  "proxy": "",
+  "difficulty": 559970892890.8381,
+  "testnet": false,
+  "paytxfee": 0.00000000,
+  "relayfee": 0.00001000,
+  "errors": ""
+}
+HEREDOC
+
 PEER_INFO = <<-HEREDOC
 [
   {

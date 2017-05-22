@@ -9,7 +9,7 @@ require 'uri'
 # Allows you to easily add/ban/connect/disconnect nodes
 # based on User Agent.
 class Pickynode
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   def initialize(opts = {})
     @opts = opts
@@ -50,6 +50,10 @@ class Pickynode
     ap addr_types
   end
 
+  def info
+    ap getinfo
+  end
+
   def run
     add(@opts[:add])
     connect(@opts[:connect])
@@ -57,9 +61,8 @@ class Pickynode
     ban(@opts[:ban])
     disconnect(@opts[:disconnect])
 
-    return unless @opts.values.select { |v| v }.empty?
-
-    display
+    info if @opts[:info]
+    display if @opts.values.select { |v| v }.empty?
   end
 
   def clear_cache
@@ -97,6 +100,12 @@ class Pickynode
 
   def bitnodes_snapshot
     Net::HTTP.get(URI.parse('https://bitnodes.21.co/api/v1/snapshots/latest/'))
+  end
+
+  def getinfo
+    JSON.parse(`bitcoin-cli getinfo`)
+  rescue JSON::ParserError
+    {}
   end
 
   def getpeerinfo

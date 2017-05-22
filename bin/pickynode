@@ -9,6 +9,7 @@ opts = Trollop.options do
   opt :connect, 'Connect to node type', type: :string
   opt :ban, 'Ban node type', type: :string
   opt :debug, 'Debug mode'
+  opt :info, 'Local node info'
   opt :output, 'Output commands'
   opt :disconnect, 'Disconnect from node type', type: :string
 end

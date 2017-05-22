@@ -45,17 +45,17 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.1.1
+pickynode v0.1.2
 Options:
   -a, --add=<s>           Add node type
   -c, --connect=<s>       Connect to node type
   -b, --ban=<s>           Ban node type
   -d, --debug             Debug mode
+  -i, --info              Local node info
   -o, --output            Output commands
-  -i, --disconnect=<s>    Disconnect from node type
+  -s, --disconnect=<s>    Disconnect from node type
   -v, --version           Print version and exit
   -h, --help              Show this message
-
 ```
 
 The --add and --connect commands pull data from Bitnodes.
