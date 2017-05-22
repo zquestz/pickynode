@@ -9,7 +9,7 @@ require 'uri'
 # Allows you to easily add/ban/connect/disconnect nodes
 # based on User Agent.
 class Pickynode
-  VERSION = '0.1.0'
+  VERSION = '0.1.1'
 
   def initialize(opts = {})
     @opts = opts
