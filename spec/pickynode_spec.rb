@@ -19,6 +19,9 @@ describe Pickynode do
       ipv6_ip => '/SecondClient/' }
   end
 
+  # String to simulate a json error
+  let(:json_error) { 'An error occurred.' }
+
   subject { Pickynode.new(opts) }
 
   describe '.add' do
@@ -38,6 +41,13 @@ describe Pickynode do
       expect(subject).to_not receive(:run_cmd)
       subject.add(false)
       subject.add(nil)
+    end
+
+    it 'should recover gracefully if json is malformed' do
+      expect(subject).to receive(:bitnodes_snapshot).once
+        .and_return(json_error)
+      expect(subject).to_not receive(:run_cmd)
+      subject.add('Anything')
     end
   end
 
@@ -64,6 +74,13 @@ describe Pickynode do
       subject.ban(false)
       subject.ban(nil)
     end
+
+    it 'should recover gracefully if json is malformed' do
+      expect(subject).to receive(:getpeerinfo).once
+        .and_return(json_error)
+      expect(subject).to_not receive(:run_cmd)
+      subject.ban('Anything')
+    end
   end
 
   describe '.connect' do
@@ -83,6 +100,13 @@ describe Pickynode do
       expect(subject).to_not receive(:run_cmd)
       subject.connect(false)
       subject.connect(nil)
+    end
+
+    it 'should recover gracefully if json is malformed' do
+      expect(subject).to receive(:bitnodes_snapshot).once
+        .and_return(json_error)
+      expect(subject).to_not receive(:run_cmd)
+      subject.connect('Anything')
     end
   end
 
@@ -104,6 +128,13 @@ describe Pickynode do
       subject.disconnect(false)
       subject.disconnect(nil)
     end
+
+    it 'should recover gracefully if json is malformed' do
+      expect(subject).to receive(:getpeerinfo).once
+        .and_return(json_error)
+      expect(subject).to_not receive(:run_cmd)
+      subject.disconnect('Anything')
+    end
   end
 
   describe '.display' do
@@ -112,6 +143,13 @@ describe Pickynode do
         .and_return(PEER_INFO)
       expect(subject).to receive(:ap).with(node_hash).and_return(node_hash)
       expect(subject.display).to eq(node_hash)
+    end
+
+    it 'should recover gracefully if json is malformed' do
+      expect(subject).to receive(:getpeerinfo).once
+        .and_return(json_error)
+      expect(subject).to receive(:ap).with({}).and_return({})
+      expect(subject.display).to eq({})
     end
   end
 
@@ -143,6 +181,15 @@ describe Pickynode do
         expect(subject).to_not receive(:display)
         subject.run
       end
+
+      it 'should recover gracefully if json is malformed' do
+        expect(subject).to receive(:bitnodes_snapshot).at_least(1)
+          .and_return(json_error)
+        expect(subject).to receive(:getpeerinfo).at_least(1)
+          .and_return(json_error)
+        expect(subject).to_not receive(:run_cmd)
+        subject.run
+      end
     end
 
     context 'without opts' do
@@ -155,6 +202,14 @@ describe Pickynode do
           .and_return(PEER_INFO)
         expect(subject).to receive(:ap).with(node_hash).and_return(node_hash)
         expect(subject).to receive(:display).and_call_original
+        subject.run
+      end
+
+      it 'should recover gracefully if json is malformed' do
+        expect(subject).to receive(:getpeerinfo).once
+          .and_return(json_error)
+        expect(subject).to_not receive(:run_cmd)
+        expect(subject).to receive(:ap).with({}).and_return({})
         subject.run
       end
     end
