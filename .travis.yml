@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - "2.2.7"
+  - "2.3.4"
+  - "rbx"
+  - "jruby"
+matrix:
+  allow_failures:
+    - rvm: "rbx"
+    - rvm: "jruby"
