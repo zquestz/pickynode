@@ -1,4 +1,8 @@
+ClassLength:
+  Enabled: false
 Metrics/BlockLength:
   ExcludedMethods: ['describe', 'context']
 Style/IndentHeredoc:
+  Enabled: false
+Style/NumericPredicate:
   Enabled: false

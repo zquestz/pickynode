@@ -9,16 +9,23 @@ require 'uri'
 # Allows you to easily add/ban/connect/disconnect nodes
 # based on User Agent.
 class Pickynode
-  VERSION = '0.1.2'
+  VERSION = '0.1.3'
 
   def initialize(opts = {})
     @opts = opts
   end
 
-  def add(filter)
+  def add(filter, limit = nil)
     return unless filter
+
+    raise 'Limit must be greater than 0' unless valid_limit?(limit)
+
+    count = 0
     bitnode_addr_types.each do |k, v|
-      run_cmd(%(bitcoin-cli addnode "#{k}" "add")) if v.include?(filter)
+      next unless v.include?(filter)
+      run_cmd(%(bitcoin-cli addnode "#{k}" "add"))
+      count += 1
+      break if limit == count
     end
   end
 
@@ -32,10 +39,17 @@ class Pickynode
     end
   end
 
-  def connect(filter)
+  def connect(filter, limit = nil)
     return unless filter
+
+    raise 'Limit must be greater than 0' unless valid_limit?(limit)
+
+    count = 0
     bitnode_addr_types.each do |k, v|
-      run_cmd(%(bitcoin-cli addnode "#{k}" "onetry")) if v.include?(filter)
+      next unless v.include?(filter)
+      run_cmd(%(bitcoin-cli addnode "#{k}" "onetry"))
+      count += 1
+      break if limit == count
     end
   end
 
@@ -55,14 +69,13 @@ class Pickynode
   end
 
   def run
-    add(@opts[:add])
-    connect(@opts[:connect])
+    add(@opts[:add], @opts[:limit])
+    connect(@opts[:connect], @opts[:limit])
 
     ban(@opts[:ban])
     disconnect(@opts[:disconnect])
 
-    info if @opts[:info]
-    display if @opts.values.select { |v| v }.empty?
+    display_info
   end
 
   def clear_cache
@@ -71,6 +84,11 @@ class Pickynode
   end
 
   private
+
+  def display_info
+    info if @opts[:info]
+    display if @opts.values.select { |v| v }.empty?
+  end
 
   def run_cmd(cmd)
     puts "Running #{cmd}" if @opts[:output] || @opts[:debug]
@@ -110,5 +128,10 @@ class Pickynode
 
   def getpeerinfo
     `bitcoin-cli getpeerinfo`
+  end
+
+  def valid_limit?(limit)
+    return true unless limit
+    limit > 0
   end
 end

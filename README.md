@@ -45,7 +45,7 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.1.2
+pickynode v0.1.3
 Options:
   -a, --add=<s>           Add node type
   -c, --connect=<s>       Connect to node type
@@ -54,6 +54,7 @@ Options:
   -i, --info              Local node info
   -o, --output            Output commands
   -s, --disconnect=<s>    Disconnect from node type
+  -l, --limit=<i>         Limit number of nodes to add/connect
   -v, --version           Print version and exit
   -h, --help              Show this message
 ```

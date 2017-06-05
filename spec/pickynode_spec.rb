@@ -52,6 +52,33 @@ describe Pickynode do
       expect(subject).to_not receive(:run_cmd)
       subject.add('Anything')
     end
+
+    it 'should raise an error if the limit is <= 0' do
+      expect { subject.add('Anything', 0) }
+        .to raise_error('Limit must be greater than 0')
+      expect { subject.add('Anything', -5) }
+        .to raise_error('Limit must be greater than 0')
+    end
+
+    context 'with a limit' do
+      it 'should respect a limit parameter of 1' do
+        expect(subject).to receive(:bitnodes_snapshot).once
+          .and_return(BITNODES_SNAPSHOT)
+        expect(subject).to receive(:run_cmd)
+          .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
+        subject.add('i', 1)
+      end
+
+      it 'should respect a limit parameter greater than 1' do
+        expect(subject).to receive(:bitnodes_snapshot).once
+          .and_return(BITNODES_SNAPSHOT)
+        expect(subject).to receive(:run_cmd)
+          .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
+        expect(subject).to receive(:run_cmd)
+          .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
+        subject.add('i', 2)
+      end
+    end
   end
 
   describe '.ban' do
@@ -110,6 +137,33 @@ describe Pickynode do
         .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.connect('Anything')
+    end
+
+    it 'should raise an error if the limit is <= 0' do
+      expect { subject.connect('Anything', 0) }
+        .to raise_error('Limit must be greater than 0')
+      expect { subject.connect('Anything', -5) }
+        .to raise_error('Limit must be greater than 0')
+    end
+
+    context 'with a limit' do
+      it 'should respect a limit parameter of 1' do
+        expect(subject).to receive(:bitnodes_snapshot).once
+          .and_return(BITNODES_SNAPSHOT)
+        expect(subject).to receive(:run_cmd)
+          .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
+        subject.connect('i', 1)
+      end
+
+      it 'should respect a limit parameter greater than 1' do
+        expect(subject).to receive(:bitnodes_snapshot).once
+          .and_return(BITNODES_SNAPSHOT)
+        expect(subject).to receive(:run_cmd)
+          .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
+        expect(subject).to receive(:run_cmd)
+          .with(%(bitcoin-cli addnode "#{ipv6_ip}" "onetry"))
+        subject.connect('i', 2)
+      end
     end
   end
 
@@ -182,7 +236,8 @@ describe Pickynode do
           add: 'Wanted',
           connect: 'Now',
           ban: 'Nefarious',
-          disconnect: 'Fools'
+          disconnect: 'Fools',
+          limit: 1
         }
       end
 
@@ -191,9 +246,9 @@ describe Pickynode do
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:getpeerinfo).once
           .and_return(PEER_INFO)
-        expect(subject).to receive(:add).with(opts[:add])
+        expect(subject).to receive(:add).with(opts[:add], opts[:limit])
           .and_call_original
-        expect(subject).to receive(:connect).with(opts[:connect])
+        expect(subject).to receive(:connect).with(opts[:connect], opts[:limit])
           .and_call_original
         expect(subject).to receive(:ban).with(opts[:ban])
           .and_call_original

@@ -12,6 +12,8 @@ opts = Trollop.options do
   opt :info, 'Local node info'
   opt :output, 'Output commands'
   opt :disconnect, 'Disconnect from node type', type: :string
+  opt :limit, 'Limit number of nodes to add/connect', type: :integer
 end
 
+Trollop.die :limit, 'must be positive' if opts[:limit] && opts[:limit] <= 0
 Pickynode.new(opts).run
