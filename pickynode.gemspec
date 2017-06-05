@@ -5,7 +5,6 @@ require File.expand_path(File.join('..', 'lib', 'pickynode'), __FILE__)
 Gem::Specification.new do |s|
   s.name        = 'pickynode'
   s.version     = Pickynode::VERSION
-  s.date        = '2017-05-19'
   s.summary     = 'Manage connections to your bitcoin node'
   s.description = "Some people are picky about the \
 bitcoin nodes they connect to."
