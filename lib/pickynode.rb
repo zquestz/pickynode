@@ -9,7 +9,7 @@ require 'uri'
 # Allows you to easily add/ban/connect/disconnect nodes
 # based on User Agent.
 class Pickynode
-  VERSION = '0.1.3'
+  VERSION = '0.1.4'
 
   def initialize(opts = {})
     @opts = opts
@@ -18,11 +18,10 @@ class Pickynode
   def add(filter, limit = nil)
     return unless filter
 
-    raise 'Limit must be greater than 0' unless valid_limit?(limit)
+    validate_limit(limit)
 
     count = 0
-    bitnode_addr_types.each do |k, v|
-      next unless v.include?(filter)
+    bitnode_addr_types.select { |_, v| v.include?(filter) }.each do |k, _|
       run_cmd(%(bitcoin-cli addnode "#{k}" "add"))
       count += 1
       break if limit == count
@@ -42,11 +41,10 @@ class Pickynode
   def connect(filter, limit = nil)
     return unless filter
 
-    raise 'Limit must be greater than 0' unless valid_limit?(limit)
+    validate_limit(limit)
 
     count = 0
-    bitnode_addr_types.each do |k, v|
-      next unless v.include?(filter)
+    bitnode_addr_types.select { |_, v| v.include?(filter) }.each do |k, _|
       run_cmd(%(bitcoin-cli addnode "#{k}" "onetry"))
       count += 1
       break if limit == count
@@ -130,8 +128,8 @@ class Pickynode
     `bitcoin-cli getpeerinfo`
   end
 
-  def valid_limit?(limit)
-    return true unless limit
-    limit > 0
+  def validate_limit(limit)
+    return unless limit
+    raise 'Limit must be greater than 0' unless limit > 0
   end
 end
