@@ -20,22 +20,22 @@ class Pickynode
 
     validate_limit(limit)
 
-    count = 0
-    bitnode_addr_types.select { |_, v| v.include?(filter) }.each do |k, _|
-      run_cmd(%(bitcoin-cli addnode "#{k}" "add"))
-      count += 1
-      break if limit == count
-    end
+    bitnode_addr_types
+      .select { |_, v| v.include?(filter) }
+      .each_with_index do |(k, _), i|
+        break if limit == i
+        run_cmd(%(bitcoin-cli addnode "#{k}" "add"))
+      end
   end
 
   def ban(filter)
     return unless filter
-    addr_types.each do |k, v|
-      if v.include?(filter)
+    addr_types
+      .select { |_, v| v.include?(filter) }
+      .each do |k, _|
         u = URI.parse("https://#{k}")
         run_cmd(%(bitcoin-cli setban "#{u.host}" "add"))
       end
-    end
   end
 
   def connect(filter, limit = nil)
@@ -43,19 +43,22 @@ class Pickynode
 
     validate_limit(limit)
 
-    count = 0
-    bitnode_addr_types.select { |_, v| v.include?(filter) }.each do |k, _|
-      run_cmd(%(bitcoin-cli addnode "#{k}" "onetry"))
-      count += 1
-      break if limit == count
-    end
+    bitnode_addr_types
+      .select { |_, v| v.include?(filter) }
+      .each_with_index do |(k, _), i|
+        break if limit == i
+        run_cmd(%(bitcoin-cli addnode "#{k}" "onetry"))
+      end
   end
 
   def disconnect(filter)
     return unless filter
-    addr_types.each do |k, v|
-      run_cmd(%(bitcoin-cli disconnectnode "#{k}")) if v.include?(filter)
-    end
+
+    addr_types
+      .select { |_, v| v.include?(filter) }
+      .each do |k, _|
+        run_cmd(%(bitcoin-cli disconnectnode "#{k}"))
+      end
   end
 
   def display
