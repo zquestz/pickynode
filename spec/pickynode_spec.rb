@@ -29,7 +29,8 @@ describe Pickynode do
 
   describe '.add' do
     it 'should add nodes based on user agent' do
-      expect(subject).to receive(:bitnodes_snapshot).once
+      expect(subject).to receive(:bitnodes_snapshot)
+        .once
         .and_return(BITNODES_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
@@ -47,7 +48,8 @@ describe Pickynode do
     end
 
     it 'should recover gracefully if json is malformed' do
-      expect(subject).to receive(:bitnodes_snapshot).once
+      expect(subject).to receive(:bitnodes_snapshot)
+        .once
         .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.add('Anything')
@@ -62,7 +64,8 @@ describe Pickynode do
 
     context 'with a limit' do
       it 'should respect a limit parameter of 1' do
-        expect(subject).to receive(:bitnodes_snapshot).once
+        expect(subject).to receive(:bitnodes_snapshot)
+          .once
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
@@ -70,7 +73,8 @@ describe Pickynode do
       end
 
       it 'should respect a limit parameter greater than 1' do
-        expect(subject).to receive(:bitnodes_snapshot).once
+        expect(subject).to receive(:bitnodes_snapshot)
+          .once
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
@@ -84,14 +88,14 @@ describe Pickynode do
   describe '.ban' do
     it 'should ban nodes based on user agent' do
       expect(subject).to receive(:`).once
-        .and_return(PEER_INFO)
+                                    .and_return(PEER_INFO)
       expect(URI).to receive(:parse).with('https://131.114.88.218:33422')
-        .and_call_original
+                                    .and_call_original
       expect(subject).to receive(:run_cmd)
         .with('bitcoin-cli setban "131.114.88.218" "add"')
       subject.ban('FirstClient')
       expect(URI).to receive(:parse).with("https://#{ipv6_ip}")
-        .and_call_original
+                                    .and_call_original
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli setban "#{ipv6_ip_no_port}" "add"))
       subject.ban('SecondClient')
@@ -107,7 +111,7 @@ describe Pickynode do
 
     it 'should recover gracefully if json is malformed' do
       expect(subject).to receive(:`).once
-        .and_return(json_error)
+                                    .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.ban('Anything')
     end
@@ -115,7 +119,8 @@ describe Pickynode do
 
   describe '.connect' do
     it 'should connect to nodes based on user agent' do
-      expect(subject).to receive(:bitnodes_snapshot).once
+      expect(subject).to receive(:bitnodes_snapshot)
+        .once
         .and_return(BITNODES_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
@@ -134,7 +139,7 @@ describe Pickynode do
 
     it 'should recover gracefully if json is malformed' do
       expect(subject).to receive(:bitnodes_snapshot).once
-        .and_return(json_error)
+                                                    .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.connect('Anything')
     end
@@ -148,7 +153,8 @@ describe Pickynode do
 
     context 'with a limit' do
       it 'should respect a limit parameter of 1' do
-        expect(subject).to receive(:bitnodes_snapshot).once
+        expect(subject).to receive(:bitnodes_snapshot)
+          .once
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
@@ -156,7 +162,8 @@ describe Pickynode do
       end
 
       it 'should respect a limit parameter greater than 1' do
-        expect(subject).to receive(:bitnodes_snapshot).once
+        expect(subject).to receive(:bitnodes_snapshot)
+          .once
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
@@ -170,7 +177,7 @@ describe Pickynode do
   describe '.disconnect' do
     it 'should disconnect nodes based on user agent' do
       expect(subject).to receive(:`).once
-        .and_return(PEER_INFO)
+                                    .and_return(PEER_INFO)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli disconnectnode "#{ipv6_ip}"))
       subject.disconnect('SecondClient')
@@ -188,7 +195,7 @@ describe Pickynode do
 
     it 'should recover gracefully if json is malformed' do
       expect(subject).to receive(:`).once
-        .and_return(json_error)
+                                    .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.disconnect('Anything')
     end
@@ -197,14 +204,14 @@ describe Pickynode do
   describe '.display' do
     it 'should display connected nodes' do
       expect(subject).to receive(:`).once
-        .and_return(PEER_INFO)
+                                    .and_return(PEER_INFO)
       expect(subject).to receive(:ap).with(node_hash).and_return(node_hash)
       expect(subject.display).to eq(node_hash)
     end
 
     it 'should recover gracefully if json is malformed' do
       expect(subject).to receive(:`).once
-        .and_return(json_error)
+                                    .and_return(json_error)
       expect(subject).to receive(:ap).with({}).and_return({})
       expect(subject.display).to eq({})
     end
@@ -213,15 +220,15 @@ describe Pickynode do
   describe '.info' do
     it 'should display local node info' do
       expect(subject).to receive(:`).once
-        .and_return(NODE_INFO)
+                                    .and_return(NODE_INFO)
       expect(subject).to receive(:ap).with(parsed_node_info)
-        .and_return(parsed_node_info)
+                                     .and_return(parsed_node_info)
       expect(subject.info).to eq(parsed_node_info)
     end
 
     it 'should recover gracefully if json is malformed' do
       expect(subject).to receive(:`).once
-        .and_return(json_error)
+                                    .and_return(json_error)
       expect(subject).to receive(:ap).with({}).and_return({})
       expect(subject.info).to eq({})
     end
@@ -242,18 +249,19 @@ describe Pickynode do
       end
 
       it 'should call add, connect, ban, disconnect and info' do
-        expect(subject).to receive(:bitnodes_snapshot).once
+        expect(subject).to receive(:bitnodes_snapshot)
+          .once
           .and_return(BITNODES_SNAPSHOT)
         expect(subject).to receive(:getpeerinfo).once
-          .and_return(PEER_INFO)
+                                                .and_return(PEER_INFO)
         expect(subject).to receive(:add).with(opts[:add], opts[:limit])
-          .and_call_original
+                                        .and_call_original
         expect(subject).to receive(:connect).with(opts[:connect], opts[:limit])
-          .and_call_original
+                                            .and_call_original
         expect(subject).to receive(:ban).with(opts[:ban])
-          .and_call_original
+                                        .and_call_original
         expect(subject).to receive(:disconnect).with(opts[:disconnect])
-          .and_call_original
+                                               .and_call_original
         expect(subject).to receive(:info)
         expect(subject).to_not receive(:display)
         subject.run
@@ -261,9 +269,9 @@ describe Pickynode do
 
       it 'should recover gracefully if json is malformed' do
         expect(subject).to receive(:bitnodes_snapshot).at_least(1)
-          .and_return(json_error)
+                                                      .and_return(json_error)
         expect(subject).to receive(:getpeerinfo).at_least(1)
-          .and_return(json_error)
+                                                .and_return(json_error)
         expect(subject).to receive(:`)
           .and_return(json_error)
         expect(subject).to receive(:info)
@@ -281,7 +289,7 @@ describe Pickynode do
 
       it 'should call display' do
         expect(subject).to receive(:`).once
-          .and_return(PEER_INFO)
+                                      .and_return(PEER_INFO)
         expect(subject).to receive(:ap).with(node_hash).and_return(node_hash)
         expect(subject).to receive(:display).and_call_original
         subject.run
@@ -289,7 +297,7 @@ describe Pickynode do
 
       it 'should recover gracefully if json is malformed' do
         expect(subject).to receive(:`).once
-          .and_return(json_error)
+                                      .and_return(json_error)
         expect(subject).to_not receive(:run_cmd)
         expect(subject).to_not receive(:info)
         expect(subject).to receive(:ap).with({}).and_return({})
@@ -300,7 +308,8 @@ describe Pickynode do
 
   describe 'clear_cache' do
     it 'should clear the bitnodes cache' do
-      expect(subject).to receive(:bitnodes_snapshot).once
+      expect(subject).to receive(:bitnodes_snapshot)
+        .once
         .and_return(BITNODES_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
@@ -309,7 +318,8 @@ describe Pickynode do
       subject.add('Satoshi')
       subject.add('Unlimited')
       subject.clear_cache
-      expect(subject).to receive(:bitnodes_snapshot).once
+      expect(subject).to receive(:bitnodes_snapshot)
+        .once
         .and_return(BITNODES_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
@@ -318,11 +328,11 @@ describe Pickynode do
 
     it 'should clear the getpeerinfo cache' do
       expect(subject).to receive(:getpeerinfo).once
-        .and_return(PEER_INFO)
+                                              .and_return(PEER_INFO)
       expect(URI).to receive(:parse).with('https://131.114.88.218:33422')
-        .and_call_original
+                                    .and_call_original
       expect(URI).to receive(:parse).with(%(https://#{ipv6_ip}))
-        .and_call_original
+                                    .and_call_original
       expect(subject).to receive(:run_cmd)
         .with('bitcoin-cli setban "131.114.88.218" "add"')
       expect(subject).to receive(:run_cmd)
@@ -331,9 +341,9 @@ describe Pickynode do
       subject.ban('SecondClient')
       subject.clear_cache
       expect(subject).to receive(:getpeerinfo).once
-        .and_return(PEER_INFO)
+                                              .and_return(PEER_INFO)
       expect(URI).to receive(:parse).with('https://131.114.88.218:33422')
-        .and_call_original
+                                    .and_call_original
       expect(subject).to receive(:run_cmd)
         .with('bitcoin-cli setban "131.114.88.218" "add"')
       subject.ban('FirstClient')

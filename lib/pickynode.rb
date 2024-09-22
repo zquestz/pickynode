@@ -3,13 +3,13 @@
 require 'awesome_print'
 require 'json'
 require 'net/http'
-require 'trollop'
+require 'optimist'
 require 'uri'
 
 # Allows you to easily add/ban/connect/disconnect nodes
 # based on User Agent.
 class Pickynode
-  VERSION = '0.1.4'
+  VERSION = '0.2.0'
 
   def initialize(opts = {})
     @opts = opts
@@ -24,12 +24,14 @@ class Pickynode
       .select { |_, v| v.include?(filter) }
       .each_with_index do |(k, _), i|
         break if limit == i
+
         run_cmd(%(bitcoin-cli addnode "#{k}" "add"))
       end
   end
 
   def ban(filter)
     return unless filter
+
     addr_types
       .select { |_, v| v.include?(filter) }
       .each do |k, _|
@@ -47,6 +49,7 @@ class Pickynode
       .select { |_, v| v.include?(filter) }
       .each_with_index do |(k, _), i|
         break if limit == i
+
         run_cmd(%(bitcoin-cli addnode "#{k}" "onetry"))
       end
   end
@@ -98,6 +101,7 @@ class Pickynode
 
   def addr_types
     return @addr_types if @addr_types
+
     nodes = getpeerinfo
     parsed_nodes = JSON.parse(nodes)
     @addr_types = parsed_nodes.map do |n|
@@ -109,6 +113,7 @@ class Pickynode
 
   def bitnode_addr_types
     return @bitnode_addr_types if @bitnode_addr_types
+
     parsed_nodelist = JSON.parse(bitnodes_snapshot)
     @bitnode_addr_types = parsed_nodelist['nodes'].map do |k, v|
       [k, v[1]]

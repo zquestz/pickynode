@@ -15,13 +15,13 @@ bitcoin nodes they connect to."
   s.executables << 'pickynode'
   s.files         = `git ls-files`.split("\n")
   s.require_paths = ['lib']
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.3'
 
   s.add_dependency 'awesome_print', '~> 1.7'
-  s.add_dependency 'trollop', '~> 2.1'
+  s.add_dependency 'optimist', '~> 3.0'
 
-  s.add_development_dependency 'rspec', '~> 3.6'
   s.add_development_dependency 'rake', '~> 12.0'
+  s.add_development_dependency 'rspec', '~> 3.6'
   s.add_development_dependency 'rubocop', '~> 0.48'
   s.add_development_dependency 'simplecov', '~> 0.14'
 end
