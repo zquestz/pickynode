@@ -127,7 +127,19 @@ class Pickynode
   end
 
   def getinfo
-    JSON.parse(`bitcoin-cli getinfo`)
+    getblockchaininfo.merge(getnetworkinfo)
+  rescue JSON::ParserError
+    {}
+  end
+
+  def getblockchaininfo
+    JSON.parse(`bitcoin-cli getblockchaininfo`)
+  rescue JSON::ParserError
+    {}
+  end
+
+  def getnetworkinfo
+    JSON.parse(`bitcoin-cli getnetworkinfo`)
   rescue JSON::ParserError
     {}
   end

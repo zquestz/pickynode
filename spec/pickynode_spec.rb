@@ -219,7 +219,7 @@ describe Pickynode do
 
   describe '.info' do
     it 'should display local node info' do
-      expect(subject).to receive(:`).once
+      expect(subject).to receive(:`).twice
                                     .and_return(NODE_INFO)
       expect(subject).to receive(:ap).with(parsed_node_info)
                                      .and_return(parsed_node_info)
@@ -227,7 +227,7 @@ describe Pickynode do
     end
 
     it 'should recover gracefully if json is malformed' do
-      expect(subject).to receive(:`).once
+      expect(subject).to receive(:`).twice
                                     .and_return(json_error)
       expect(subject).to receive(:ap).with({}).and_return({})
       expect(subject.info).to eq({})
@@ -272,8 +272,8 @@ describe Pickynode do
                                                       .and_return(json_error)
         expect(subject).to receive(:getpeerinfo).at_least(1)
                                                 .and_return(json_error)
-        expect(subject).to receive(:`)
-          .and_return(json_error)
+        expect(subject).to receive(:`).twice
+                                      .and_return(json_error)
         expect(subject).to receive(:info)
           .and_call_original
         expect(subject).to receive(:ap).with({})

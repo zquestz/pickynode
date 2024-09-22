@@ -49,7 +49,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_print (~> 1.9)
+  awesome_print (~> 1.7)
   optimist (~> 3.0)
   rake (~> 12.0)
   rspec (~> 3.6)
