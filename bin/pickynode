@@ -17,4 +17,5 @@ opts = Optimist.options do
 end
 
 Optimist.die :limit, 'must be positive' if opts[:limit] && opts[:limit] <= 0
+Optimist.die :ticker, 'must be BCH or BTC' unless %w[BCH BTC].include?(opts[:ticker])
 Pickynode.new(opts).run
