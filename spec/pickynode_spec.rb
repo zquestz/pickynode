@@ -29,9 +29,9 @@ describe Pickynode do
 
   describe '.add' do
     it 'should add nodes based on user agent' do
-      expect(subject).to receive(:bitnodes_snapshot)
+      expect(subject).to receive(:blockchair_snapshot)
         .once
-        .and_return(BITNODES_SNAPSHOT)
+        .and_return(BLOCKCHAIR_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
       subject.add('Satoshi')
@@ -41,14 +41,14 @@ describe Pickynode do
     end
 
     it 'should return if the filter is falsy' do
-      expect(subject).to_not receive(:bitnodes_snapshot)
+      expect(subject).to_not receive(:blockchair_snapshot)
       expect(subject).to_not receive(:run_cmd)
       subject.add(false)
       subject.add(nil)
     end
 
     it 'should recover gracefully if json is malformed' do
-      expect(subject).to receive(:bitnodes_snapshot)
+      expect(subject).to receive(:blockchair_snapshot)
         .once
         .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
@@ -64,18 +64,18 @@ describe Pickynode do
 
     context 'with a limit' do
       it 'should respect a limit parameter of 1' do
-        expect(subject).to receive(:bitnodes_snapshot)
+        expect(subject).to receive(:blockchair_snapshot)
           .once
-          .and_return(BITNODES_SNAPSHOT)
+          .and_return(BLOCKCHAIR_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
         subject.add('i', 1)
       end
 
       it 'should respect a limit parameter greater than 1' do
-        expect(subject).to receive(:bitnodes_snapshot)
+        expect(subject).to receive(:blockchair_snapshot)
           .once
-          .and_return(BITNODES_SNAPSHOT)
+          .and_return(BLOCKCHAIR_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "add"')
         expect(subject).to receive(:run_cmd)
@@ -119,9 +119,9 @@ describe Pickynode do
 
   describe '.connect' do
     it 'should connect to nodes based on user agent' do
-      expect(subject).to receive(:bitnodes_snapshot)
+      expect(subject).to receive(:blockchair_snapshot)
         .once
-        .and_return(BITNODES_SNAPSHOT)
+        .and_return(BLOCKCHAIR_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
       subject.connect('Unlimited')
@@ -131,15 +131,15 @@ describe Pickynode do
     end
 
     it 'should return if the filter is falsy' do
-      expect(subject).to_not receive(:bitnodes_snapshot)
+      expect(subject).to_not receive(:blockchair_snapshot)
       expect(subject).to_not receive(:run_cmd)
       subject.connect(false)
       subject.connect(nil)
     end
 
     it 'should recover gracefully if json is malformed' do
-      expect(subject).to receive(:bitnodes_snapshot).once
-                                                    .and_return(json_error)
+      expect(subject).to receive(:blockchair_snapshot).once
+                                                      .and_return(json_error)
       expect(subject).to_not receive(:run_cmd)
       subject.connect('Anything')
     end
@@ -153,18 +153,18 @@ describe Pickynode do
 
     context 'with a limit' do
       it 'should respect a limit parameter of 1' do
-        expect(subject).to receive(:bitnodes_snapshot)
+        expect(subject).to receive(:blockchair_snapshot)
           .once
-          .and_return(BITNODES_SNAPSHOT)
+          .and_return(BLOCKCHAIR_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
         subject.connect('i', 1)
       end
 
       it 'should respect a limit parameter greater than 1' do
-        expect(subject).to receive(:bitnodes_snapshot)
+        expect(subject).to receive(:blockchair_snapshot)
           .once
-          .and_return(BITNODES_SNAPSHOT)
+          .and_return(BLOCKCHAIR_SNAPSHOT)
         expect(subject).to receive(:run_cmd)
           .with('bitcoin-cli addnode "88.99.199.87:8333" "onetry"')
         expect(subject).to receive(:run_cmd)
@@ -249,9 +249,9 @@ describe Pickynode do
       end
 
       it 'should call add, connect, ban, disconnect and info' do
-        expect(subject).to receive(:bitnodes_snapshot)
+        expect(subject).to receive(:blockchair_snapshot)
           .once
-          .and_return(BITNODES_SNAPSHOT)
+          .and_return(BLOCKCHAIR_SNAPSHOT)
         expect(subject).to receive(:getpeerinfo).once
                                                 .and_return(PEER_INFO)
         expect(subject).to receive(:add).with(opts[:add], opts[:limit])
@@ -268,8 +268,8 @@ describe Pickynode do
       end
 
       it 'should recover gracefully if json is malformed' do
-        expect(subject).to receive(:bitnodes_snapshot).at_least(1)
-                                                      .and_return(json_error)
+        expect(subject).to receive(:blockchair_snapshot).at_least(1)
+                                                        .and_return(json_error)
         expect(subject).to receive(:getpeerinfo).at_least(1)
                                                 .and_return(json_error)
         expect(subject).to receive(:`).twice
@@ -307,10 +307,10 @@ describe Pickynode do
   end
 
   describe 'clear_cache' do
-    it 'should clear the bitnodes cache' do
-      expect(subject).to receive(:bitnodes_snapshot)
+    it 'should clear the blockchair cache' do
+      expect(subject).to receive(:blockchair_snapshot)
         .once
-        .and_return(BITNODES_SNAPSHOT)
+        .and_return(BLOCKCHAIR_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
       expect(subject).to receive(:run_cmd)
@@ -318,9 +318,9 @@ describe Pickynode do
       subject.add('Satoshi')
       subject.add('Unlimited')
       subject.clear_cache
-      expect(subject).to receive(:bitnodes_snapshot)
+      expect(subject).to receive(:blockchair_snapshot)
         .once
-        .and_return(BITNODES_SNAPSHOT)
+        .and_return(BLOCKCHAIR_SNAPSHOT)
       expect(subject).to receive(:run_cmd)
         .with(%(bitcoin-cli addnode "#{ipv6_ip}" "add"))
       subject.add('Satoshi')

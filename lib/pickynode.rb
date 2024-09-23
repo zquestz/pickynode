@@ -20,7 +20,7 @@ class Pickynode
 
     validate_limit(limit)
 
-    bitnode_addr_types
+    blockchair_addr_types
       .select { |_, v| v.include?(filter) }
       .each_with_index do |(k, _), i|
         break if limit == i
@@ -45,7 +45,7 @@ class Pickynode
 
     validate_limit(limit)
 
-    bitnode_addr_types
+    blockchair_addr_types
       .select { |_, v| v.include?(filter) }
       .each_with_index do |(k, _), i|
         break if limit == i
@@ -84,7 +84,7 @@ class Pickynode
 
   def clear_cache
     @addr_types = nil
-    @bitnode_addr_types = nil
+    @blockchair_addr_types = nil
   end
 
   private
@@ -111,19 +111,26 @@ class Pickynode
     {}
   end
 
-  def bitnode_addr_types
-    return @bitnode_addr_types if @bitnode_addr_types
+  def blockchair_addr_types
+    return @blockchair_addr_types if @blockchair_addr_types
 
-    parsed_nodelist = JSON.parse(bitnodes_snapshot)
-    @bitnode_addr_types = parsed_nodelist['nodes'].transform_values do |v|
-      v[1]
+    parsed_nodelist = JSON.parse(blockchair_snapshot)
+    @blockchair_addr_types = parsed_nodelist['data']['nodes'].transform_values do |v|
+      v['version']
     end
   rescue JSON::ParserError
     {}
   end
 
-  def bitnodes_snapshot
-    Net::HTTP.get(URI.parse('https://bitnodes.21.co/api/v1/snapshots/latest/'))
+  def blockchair_snapshot
+    chain = case @opts[:ticker]
+            when 'BCH'
+              'bitcoin-cash'
+            when 'BTC'
+              'bitcoin'
+            end
+
+    Net::HTTP.get(URI.parse("https://api.blockchair.com/#{chain}/nodes"))
   end
 
   def getinfo

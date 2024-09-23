@@ -45,7 +45,7 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.1.4
+pickynode v0.2.0
 Options:
   -a, --add=<s>           Add node type
   -c, --connect=<s>       Connect to node type
@@ -55,8 +55,9 @@ Options:
   -o, --output            Output commands
   -s, --disconnect=<s>    Disconnect from node type
   -l, --limit=<i>         Limit number of nodes to add/connect
+  -t, --ticker=<s>        Currency ticker symbol (BCH/BTC) (default: BCH)
   -v, --version           Print version and exit
   -h, --help              Show this message
 ```
 
-The --add and --connect commands pull data from Bitnodes.
+The --add and --connect commands pull data from the Blockchair API.

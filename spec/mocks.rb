@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
-BITNODES_SNAPSHOT = <<~HEREDOC
+BLOCKCHAIR_SNAPSHOT = <<~HEREDOC
   {
-    "timestamp": 1495414383,
-    "total_nodes": 7055,
-    "latest_height": 467520,
-    "nodes": {
-      "88.99.199.87:8333": [80002, "/BitcoinUnlimited:1.0.2(EB16; AD12)/", 1494608364, 5, 467520, "static.87.199.99.88.clients.your-server.de", null, "DE", 51.2993, 9.491, "Europe/Berlin", "AS24940", "Hetzner Online GmbH"],
-      "[2a01:e34:ee3a:5730:21f:5bff:fec5:e356]:8333": [70015, "/Satoshi:0.14.0/", 1495378733, 13, 467520, "2a01:e34:ee3a:5730:21f:5bff:fec5:e356", null, "FR", 46.0, 2.0, "Europe/Paris", "AS12322", "Free SAS"]
+    "data": {
+      "nodes": {
+        "88.99.199.87:8333": {
+          "version": "\/BitcoinUnlimited:1.0.2(EB16; AD12)\/",
+          "country": "US",
+          "height": 555417,
+          "flags": 37
+        },
+        "[2a01:e34:ee3a:5730:21f:5bff:fec5:e356]:8333": {
+          "version": "\/Satoshi:0.14.0\/",
+          "country": "US",
+          "height": 555416,
+          "flags": 37
+        }
+      }
     }
   }
 HEREDOC
