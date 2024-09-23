@@ -115,9 +115,9 @@ class Pickynode
     return @bitnode_addr_types if @bitnode_addr_types
 
     parsed_nodelist = JSON.parse(bitnodes_snapshot)
-    @bitnode_addr_types = parsed_nodelist['nodes'].map do |k, v|
-      [k, v[1]]
-    end.to_h
+    @bitnode_addr_types = parsed_nodelist['nodes'].transform_values do |v|
+      v[1]
+    end
   rescue JSON::ParserError
     {}
   end
