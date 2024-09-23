@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 ruby '>= 2.4.0'
 
 gem 'awesome_print', '~> 1.7'
+gem 'base64', '~> 0.2'
 gem 'optimist', '~> 3.0'
 gem 'rake', '~> 12.0'
 gem 'rspec', '~> 3.6'
