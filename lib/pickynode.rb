@@ -91,6 +91,10 @@ class Pickynode
 
   def display_info
     info if @opts[:info]
+
+    # Remove default ticker value. Not applicable.
+    @opts.delete(:ticker)
+
     display if @opts.values.select { |v| v }.empty?
   end
 
