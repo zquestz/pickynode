@@ -17,10 +17,10 @@ bitcoin nodes they connect to."
   s.require_paths = ['lib']
   s.required_ruby_version = '>= 2.5'
 
-  s.add_dependency 'awesome_print', '~> 1.7'
-  s.add_dependency 'base64', '~> 0.2'
-  s.add_dependency 'optimist', '~> 3.0'
-  s.add_dependency 'ostruct', '~> 0.6'
+  s.add_dependency 'awesome_print', '> 1.7'
+  s.add_dependency 'base64'
+  s.add_dependency 'optimist', '> 3.0'
+  s.add_dependency 'ostruct'
 
   s.add_development_dependency 'rake', '~> 12.0'
   s.add_development_dependency 'rspec', '~> 3.6'

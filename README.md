@@ -45,7 +45,7 @@ pickynode --disconnect=USER_AGENT_FILTER
 ### Help:
 
 ```
-pickynode v0.2.1
+pickynode v0.2.2
 Options:
   -a, --add=<s>           Add node type
   -c, --connect=<s>       Connect to node type
